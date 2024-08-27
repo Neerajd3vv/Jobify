@@ -1,7 +1,7 @@
 
-function Inputfield({placeholder, style , type , onChange}) {
+function Inputfield({placeholder, value, style , type , onChange}) {
     return (
-      <input onChange={onChange} placeholder={placeholder} className={style} type={type}/>
+      <input value={value} onChange={onChange} placeholder={placeholder} className={style} type={type}/>
     )
   }
   

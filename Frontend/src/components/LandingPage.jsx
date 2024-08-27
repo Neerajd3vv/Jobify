@@ -14,7 +14,7 @@ export default function LandingPage() {
             <div className=" font-semibold text-center text-5xl md:text-6xl font-Kanit text-black mb-2">
               Ready to Take the Next Step in Your Career?
             </div>
-            <div className=" text-lg md:text-xl  text-center font-Hind text-slate-500 mb-4">
+            <div className="  px-2 lg:px:0 text-md md:text-xl  text-center font-Hind text-slate-500 mb-4">
               Create an account today, upload your resume, and get noticed by
               leading employers.
             </div>
