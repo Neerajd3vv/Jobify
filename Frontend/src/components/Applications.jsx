@@ -1,62 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   FaUser,
   FaEnvelope,
   FaPhone,
   FaLinkedin,
-  FaFilePdf,
   FaDownload,
-  FaEye,
 } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
-
 import Appbar from "./Appbar";
+import Button from "./Button";
+import Sidebar from "./Sidebar";
+import _ from "lodash";
 
 function Applications() {
-  const headings = [
-    "APPLICANT NAME",
-    "CONTACT",
-    "LINKEDIN",
-    "RESUME",
-    "DELETE ENTRY",
-  ];
+  const [applications, setApplications] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
 
   // Fetching applications
-  const [applications, setApplications] = useState([]);
-  useEffect(() => {
+  const fetchApplications = async () => {
     try {
-      fetch("http://localhost:3001/admin/applications", {
-        method: "GET",
-      }).then(async (res) => {
-        if (res.ok) {
-          const result = await res.json();
-          const finalApplicationsArray = result.Data;
-          console.log(finalApplicationsArray);
-          setApplications(finalApplicationsArray);
-        } else {
-          toast.error("Failed to get Applications");
-        }
-      });
+      const res = await fetch("http://localhost:3001/admin/applications");
+      if (res.ok) {
+        const result = await res.json();
+        setApplications(result.Data);
+      } else {
+        toast.error("Failed to get Applications");
+      }
     } catch (error) {
       console.error("Error", error);
+      toast.error("Failed to fetch applications");
     }
-  }, []);
+  };
 
-  // Deleting application
+  // Delete applications
   async function onDeleteHandler(id) {
     try {
       const deleted = await fetch(
         `http://localhost:3001/admin/deleteApplication/${id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
       if (deleted.ok) {
+        setApplications((prev) => prev.filter((app) => app._id !== id));
         toast.success("Deleted Successfully!");
-        setApplications((prev) =>
-          prev.filter((applicaiton) => applicaiton._id !== id)
-        );
       } else {
         toast.error("Failed to delete!");
       }
@@ -65,100 +52,116 @@ function Applications() {
     }
   }
 
+  // Search functionality
+  const fetchSearchedApplications = async (value) => {
+    try {
+      const res = await fetch("http://localhost:3001/admin/finding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ searchKeyWord: value }),
+      });
+      if (res.ok) {
+        const result = await res.json();
+        setApplications(result.Result);
+      } else {
+        toast.error("Failed to search applications");
+      }
+    } catch (error) {
+      console.error("Error", error);
+      toast.error("Failed to search applications");
+    }
+  };
+
+  // Debounce search
+  const debouncedSearch = useCallback(
+    _.debounce((value) => {
+      if (value) {
+        fetchSearchedApplications(value);
+      } else {
+        fetchApplications();
+      }
+    }, 300),
+    []
+  );
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchKey(value);
+    debouncedSearch(value);
+  };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
   return (
-    <div>
+    <div className="bg-slate-50 min-h-screen">
       <Appbar />
-      <div className="min-h-screen  py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold  font-poppins mb-6">
+      <div className="flex">
+        <div className="hidden lg:block">
+          <Sidebar onChange={handleSearchChange} value={searchKey} />
+        </div>
+        <div className="flex-1 p-8 lg:p-20">
+          <h1 className="text-3xl font-bold text-gray-800 mb-8">
             Applications
           </h1>
-          <div className="bg-white shadow-sm rounded-md overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-max">
-                <thead className="bg-blue-700 text-white font-Actor font-bold">
-                  <tr>
-                    {headings.map((items, index) => (
-                      <th
-                        key={index}
-                        className="px-6 py-3 text-center  font-medium  uppercase "
-                      >
-                        {items}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="bg-slate-50 ">
-                  {applications.map((app) => (
-                    <tr
-                      key={app._id}
-                      className="border-b-2  border-slate-300  "
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {applications.map((app) => (
+              <div
+                key={app._id}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <div className="bg-gray-100 rounded-full p-2 mr-3">
+                        <FaUser className="text-gray-600 text-xl" />
+                      </div>
+                      <div className="font-bold font-Afacad text-2xl text-gray-800">
+                        {app.name}
+                      </div>
+                    </div>
+                    <FaRegBookmark className="text-gray-400 hover:text-gray-600 cursor-pointer text-xl transition-colors duration-300" />
+                  </div>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center text-gray-600">
+                      <FaEnvelope className="mr-2 text-lg" />
+                      <span className="">{app.email}</span>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <FaPhone className="mr-2 text-lg" />
+                      <span className="text-sm font-mono">{app.phone}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <a
+                      href={app.linkedin}
+                      className="text-blue-600 hover:text-blue-700 flex items-center transition duration-300"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-center ">
-                        <div className="flex justify-center">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <FaUser className="h-10 w-10 rounded-full text-gray-300" />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {app.name}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap flex justify-center ">
-                        <div>
-                          <div className="text-sm text-gray-900 flex items-center">
-                            <FaEnvelope className="mr-2 text-gray-400" />{" "}
-                            {app.email}
-                          </div>
-                          <div className="text-sm text-gray-500 flex items-center mt-1">
-                            <FaPhone className="mr-2 text-gray-400" />{" "}
-                            {app.phone}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center">
-                          <div
-                            href={app.linkedin}
-                            className="text-blue-600   hover:text-blue-900 flex items-center cursor-pointer "
-                          >
-                            <FaLinkedin className="mr-2" /> Profile
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium ">
-                        <div className="flex justify-center">
-                          <div className="flex gap-4">
-                            <button className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded-md flex border-2 border-slate-200 items-center transition-colors duration-200">
-                              <FaDownload className="mr-1" /> Download
-                            </button>
-                            <button className="bg-green-100 text-green-800 hover:bg-green-200 px-3 py-1 rounded-md border-2 border-slate-200 flex items-center transition-colors duration-200">
-                              <FaEye className="mr-1" /> View
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex justify-center">
-                          <div className="items-center ">
-                            <MdDelete
-                              onClick={() => {
-                                onDeleteHandler(app._id);
-                              }}
-                              className="text-xl cursor-pointer hover:scale-150"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      <FaLinkedin className="mr-2 text-2xl" />
+                      <span className="text-sm hidden lg:block font-medium">
+                        LinkedIn
+                      </span>
+                    </a>
+                    <div className="flex space-x-2">
+                      <Button style="bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-md flex items-center text-gray-700 transition-colors duration-300">
+                        <FaDownload className="mr-2 text-sm" /> Resume
+                      </Button>
+                      <Button
+                        onClick={() => onDeleteHandler(app._id)}
+                        style="bg-red-50 hover:bg-red-100 px-3 py-2 rounded-md flex items-center text-red-600 transition-colors duration-300"
+                      >
+                        <MdDelete className="mr-2 text-lg" /> Delete
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

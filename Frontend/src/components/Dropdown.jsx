@@ -22,7 +22,7 @@ export function Dropdown() {
 
   return (
     <Select onValueChange={selectHandler}>
-      <SelectTrigger className=" w-[160px] lg:w-[200px]   focus:ring-0 bg-black text-white  ">
+      <SelectTrigger className=" w-[160px] lg:w-[200px] font-Afacad text-lg  focus:ring-0 bg-actualBlack text-white  ">
         <SelectValue placeholder="Switch to" />
       </SelectTrigger>
       <SelectContent>

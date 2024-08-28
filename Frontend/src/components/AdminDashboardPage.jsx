@@ -9,7 +9,7 @@ function AdminDashboardPage() {
     <Appbar/>
     <div className="min-h-screen  flex items-center pb-48 justify-center p-4">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-xl overflow-hidden">
-        <div className="bg-blue-700  px-6 py-8 text-white text-center">
+        <div className="bg-actualBlack  px-6 py-8 text-white text-center">
           <h1 className="text-4xl font-bold  font-poppins ">Admin Sign In</h1>
           <div className="text-blue-100 mt-2 font-Afacad text-lg">Sign in to view all applications</div>
         </div>

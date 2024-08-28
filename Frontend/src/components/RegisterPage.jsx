@@ -57,7 +57,7 @@ export default function RegisterPage() {
       <div className="  min-h-screen flex  justify-center mt-8  lg:mt-0 items-center px-3 md:px-0">
         <div className="max-w-2xl w-full border-2 shadow-xl  border-slate-200 shadow- bg-white  rounded-lg">
           <div>
-            <div className="bg-blue-700 py-6 rounded-t-lg">
+            <div className="bg-actualBlack py-6 rounded-t-lg">
               <h2 className="mt-6 text-center font-poppins text-4xl md:text-5xl font-bold text-white">
                 Register Yourself!
               </h2>

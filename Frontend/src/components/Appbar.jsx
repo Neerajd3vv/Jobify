@@ -6,7 +6,9 @@ function Appbar() {
 
   return (
    <div className="flex justify-between py-4  px-6 lg:px-40 border-b-2 border-slate-300">
-      <div className="font-Poppins font-bold text-black text-4xl">Jobify</div>
+      <div onClick={() => {
+        navigate("/")
+      }} className=" cursor-pointer font-Poppins font-bold text-black text-4xl">Jobify</div>
       <div className="flex items-center">
       <Dropdown/>
       <Button
