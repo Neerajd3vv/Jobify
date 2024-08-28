@@ -5,11 +5,26 @@ import { FaRegBookmark } from "react-icons/fa6";
 import Button from "./Button";
 import Inputfield from "./Inputfield";
 
-export default function Sidebar({ onChange, value }) {
+export default function Sidebar({
+  onChange,
+  value,
+  onBookmarkButtonClicked,
+  onAllApplicationButtonClicked,
+}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [whichButton, setWhichButton] = useState("");
+
+  function handleButtonClicked(name) {
+    setWhichButton(name);
+    if (name === "Bookmark") {
+      onBookmarkButtonClicked()
+    } else if (name === "allApplications") {
+      onAllApplicationButtonClicked()
+    }
+  }
 
   return (
-    <div >
+    <div>
       {/* default sidebar icon */}
       {!isOpen && (
         <div
@@ -17,7 +32,7 @@ export default function Sidebar({ onChange, value }) {
           onClick={() => setIsOpen(true)}
         >
           <FaChevronRight className="text-lg" />
-        </div>  
+        </div>
       )}
 
       {/* Sidebar content */}
@@ -43,9 +58,33 @@ export default function Sidebar({ onChange, value }) {
             <IoSearch className="absolute text-xl left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
         </div>
+
         <div className="px-2 mt-3">
-          <Button style="bg-actualBlack w-full text-white px-3 py-2 rounded-md flex items-center">
-            <FaRegBookmark className="text-md mr-3" /> Bookmark
+          <Button
+            onClick={() => {
+              handleButtonClicked("Bookmark");
+            }}
+            style={` ${
+              whichButton === "Bookmark" ? "bg-blue-700" : "bg-actuaBlack"
+            } bg-actualBlack hover:bg-black w-full  text-white px-3 py-2 rounded-md flex items-center`}
+          >
+            <FaRegBookmark className="text-md mr-3" />
+            <div>Bookmark</div>
+          </Button>
+        </div>
+
+        <div className="px-2 mt-3">
+          <Button
+            onClick={() => {
+              handleButtonClicked("allApplications");
+            }}
+            style={` ${
+              whichButton === "allApplications"
+                ? "bg-blue-700"
+                : "bg-actualBlack"
+            } hover:bg-black w-full text-white px-3 py-2 rounded-md flex items-center justify-center`}
+          >
+            View All Applications
           </Button>
         </div>
       </div>
