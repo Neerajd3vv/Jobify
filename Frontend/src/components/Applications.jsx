@@ -18,6 +18,11 @@ function Applications() {
   const [applications, setApplications] = useState([]);
   const [searchKey, setSearchKey] = useState("");
 
+  // Initial fetch
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
   // Fetching applications
   const fetchApplications = async () => {
     try {
@@ -53,20 +58,20 @@ function Applications() {
   }
 
   // Search functionality
-  const fetchSearchedApplications = async (value) => {
+  const fetchSearchedApplications = async (searchWord) => {
     try {
       const res = await fetch("http://localhost:3001/admin/finding", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ searchKeyWord: value }),
+        body: JSON.stringify({ searchKeyWord: searchWord }),
       });
       if (res.ok) {
         const result = await res.json();
         setApplications(result.Result);
       } else {
-        toast.error("Failed to search applications");
+        console.log("No applications found");
       }
     } catch (error) {
       console.error("Error", error);
@@ -74,38 +79,34 @@ function Applications() {
     }
   };
 
-  // Debounce search
-  const debouncedSearch = useCallback(
-    _.debounce((value) => {
-      if (value) {
-        fetchSearchedApplications(value);
-      } else {
-        fetchApplications();
-      }
-    }, 300),
-    []
-  );
+// Debouncing with help of lodash
+// usecallback to memoise the function so it wont recreate on every re-render unless its dependencies has changes!
+const debouncingSearch = useCallback(
+  _.debounce((searchwords) => {
+    fetchSearchedApplications(searchwords);
+  }, 500),
+  [] // Empty array to ensure the debounce function is only created once
+);
 
-  // Handle search input change
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchKey(value);
-    debouncedSearch(value);
+  
+  function handleSearchChange  (e)  {
+    const searchWord = e.target.value;
+    setSearchKey(searchWord);
+    debouncingSearch(searchWord);
   };
-
-  // Initial fetch
-  useEffect(() => {
-    fetchApplications();
-  }, []);
 
   return (
     <div className="bg-slate-50 min-h-screen">
       <Appbar />
       <div className="flex">
-        <div className="hidden lg:block">
-          <Sidebar onChange={handleSearchChange} value={searchKey} />
+        <div>
+          <Sidebar
+            onChange={handleSearchChange}
+            value={searchKey}
+            onClick={fetchSearchedApplications}
+          />
         </div>
-        <div className="flex-1 p-8 lg:p-20">
+        <div className="flex-1 p-4 lg:p-20">
           <h1 className="text-3xl font-bold text-gray-800 mb-8">
             Applications
           </h1>
@@ -115,7 +116,7 @@ function Applications() {
                 key={app._id}
                 className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md"
               >
-                <div className="p-6">
+                <div className="p-4 lg:p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
                       <div className="bg-gray-100 rounded-full p-2 mr-3">
