@@ -16,6 +16,10 @@ const user = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resume: {
+    type: String,
+    required: true
+  }
 });
 
 const User = mongoose.model("User", user)

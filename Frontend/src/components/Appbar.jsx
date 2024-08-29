@@ -12,7 +12,7 @@ function Appbar() {
       <div className="flex items-center">
       <Dropdown/>
       <Button
-        style="bg-blue-700 hidden lg:block hover:bg-blue-600 ml-20 font-Afacad px-7 text-white  text-xl py-2 rounded-lg"
+        style="bg-blue-700 hidden bg-blue-700  hover:bg-blue-600 font-semibold  px-8 rounded-lg  lg:block hover:bg-blue-600 ml-20  px-7 text-white text-lg py-2 "
         onClick={() => {
           navigate("/register");
         }}

@@ -4,7 +4,7 @@ import { IoSearch } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa6";
 import Button from "./Button";
 import Inputfield from "./Inputfield";
-
+import { useNavigate } from "react-router-dom";
 export default function Sidebar({
   onChange,
   value,
@@ -13,15 +13,22 @@ export default function Sidebar({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [whichButton, setWhichButton] = useState("");
-
+  const navigate = useNavigate();
   function handleButtonClicked(name) {
     setWhichButton(name);
     if (name === "Bookmark") {
-      onBookmarkButtonClicked()
+      onBookmarkButtonClicked();
     } else if (name === "allApplications") {
-      onAllApplicationButtonClicked()
+      onAllApplicationButtonClicked();
     }
   }
+ 
+  
+  function logoutAdmin() {
+    localStorage.removeItem("token"); 
+    navigate("/"); 
+  }
+  
 
   return (
     <div>
@@ -82,9 +89,17 @@ export default function Sidebar({
               whichButton === "allApplications"
                 ? "bg-blue-700"
                 : "bg-actualBlack"
-            } hover:bg-black w-full text-white px-3 py-2 rounded-md flex items-center justify-center`}
+            } hover:bg-black w-full text-white px-3 py-2 rounded-md flex items-center justify-left`}
           >
-            View All Applications
+            Applications
+          </Button>
+        </div>
+        <div className="px-2 mt-10">
+          <Button
+            onClick={logoutAdmin}
+            style={`  hover:bg-orange-400 bg-white border-2 border-slate-200 w-full text-black px-3 py-2 font-bold rounded-md flex items-center justify-left`}
+          >
+            Logout
           </Button>
         </div>
       </div>

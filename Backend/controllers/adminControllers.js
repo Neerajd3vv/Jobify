@@ -1,6 +1,5 @@
 import User from "../models/userdbSchema.js";
-import { SavedApplications } from "../models/adminSchema.js";
-import { Admin } from "../models/adminSchema.js";
+import { Admin, SavedApplications } from "../models/adminSchema.js";
 import z from "zod";
 
 export async function getAllApplication(req, res) {
@@ -63,7 +62,7 @@ const savedZod = z.object({
 
 export async function savedApplications(req, res) {
   const result = savedZod.safeParse(req.body);
-  const { name, email, phone, linkedin } = req.body;
+  const { name, email, phone, linkedin, resume } = req.body;
   if (!result.success) {
     return res
       .status(400)
@@ -79,6 +78,7 @@ export async function savedApplications(req, res) {
           email,
           phone,
           linkedin,
+          resume
         });
         return res.status(200).json({
           GoodMessage: "Application saved successfully!",
@@ -145,39 +145,23 @@ export async function createAdmin(req, res) {
 
 // admin login
 import jwt from "jsonwebtoken";
-
 export async function adminSignin(req, res) {
   try {
-    const getAdmin = await Admin.findOne({
-      name: req.body.name,
+    const admin = await Admin.findOne({
       password: req.body.password,
     });
-    if (getAdmin) {
-      const token = jwt.sign(
-        {
-          id: getAdmin._id,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" } // Add an expiration time
-      );
-      res.cookie("token_Jobify", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        sameSite: "strict", // Protect against CSRF
-        maxAge: 3600000, // 1 hour in milliseconds
-      });
-      return res.status(200).json({ GoodMessage: "Admin found and signed in" });
+    if (admin) {
+      const adminId = admin._id;
+      const token = jwt.sign({ adminId }, process.env.JWT_SECRET);
+      return res.status(200).json({ Admin_Token: token });
     } else {
-      return res
-        .status(404)
-        .json({ Notfound: "No Admin with such credentials" });
+      return res.status(400).json({ Message: "Invalid credentials" });
     }
   } catch (error) {
-    console.error("Signin error:", error);
-    return res.status(500).json({ ErrorMessage: "Internal server error" });
+    return res.status(500).json({ Message: "Internal server error" });
   }
 }
 
-export function verifyToken(req, res) {
-  return res.status(200).json({ Message: "Token is valid" });
+export function istokenSend (req,res) {
+ return res.status(200).json({Message: "Valid token"})
 }

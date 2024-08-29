@@ -1,50 +1,50 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import ApplicationCard from "./ApplicationCard";
 import BookmarkApplications from "./BookmarkApplications";
 import Appbar from "./Appbar";
 import Sidebar from "./Sidebar";
 import _ from "lodash";
-
+import { useNavigate } from "react-router-dom";
 function Applications() {
-  const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
   const [savedApplication, setSavedApplication] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   const [allBookmark, setAllBookmark] = useState(false);
-  // This useEffect will run to verify the cookie
-useEffect(() => {
-    async function checkCookie() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function verifyToken() {
+   
       try {
-        const res = await fetch("http://localhost:3001/admin/verify-token", {
-          method: "POST",
-          credentials: "include",
+        const res = await fetch("http://localhost:3001/admin/istokensend", {
+          method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Ensure Bearer scheme is used if applicable
           },
         });
-        const result = await res.json();
-        if (result.Message !== "Token is valid") {
+        if (res.ok) {
+          fetchApplications();
+        } else {
           navigate("/admin");
         }
       } catch (error) {
-        console.error("Error verifying token:", error);
+        console.error("Token verification failed", error);
+        toast.error("Something went wrong");
         navigate("/admin");
       }
     }
-    checkCookie();
-  }, []);
-
-  // Initial fetch
-  useEffect(() => {
-    fetchApplications();
-  }, []);
+    verifyToken(); // Correctly calling the verifyToken function
+  }, [navigate]);
 
   // Fetching applications
   const fetchApplications = async () => {
     try {
-      const res = await fetch("http://localhost:3001/admin/applications");
+      const res = await fetch("http://localhost:3001/admin/applications" ,{
+        headers: {
+          Authorization : `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       if (res.ok) {
         const result = await res.json();
         setApplications(result.Data);
@@ -187,7 +187,11 @@ useEffect(() => {
     // fetch all Applicationns from backend
     setAllBookmark(false);
     try {
-      const res = await fetch("http://localhost:3001/admin/applications");
+      const res = await fetch("http://localhost:3001/admin/applications" , {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       if (res.ok) {
         const result = await res.json();
         setApplications(result.Data);
@@ -216,13 +220,14 @@ useEffect(() => {
           />
         </div>
         <div className="flex-1 p-4 lg:p-20">
-          <h1 className=" text-2xl lg:text-3xl font-rubikone font-bold text-black mb-8">
-            Applications
+          <h1 className=" text-2xl md:text-4xl font-extrabold text-black mb-8">
+            APPLICATION'S
           </h1>
           {allBookmark ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {savedApplication.map((app) => (
+              {savedApplication.map((app,index) => (
                 <BookmarkApplications
+                key={index}
                   id={app._id}
                   name={app.name}
                   email={app.email}

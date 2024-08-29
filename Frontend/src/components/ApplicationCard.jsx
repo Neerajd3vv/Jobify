@@ -13,7 +13,7 @@ const IconButton = ({ icon: Icon, onClick, ariaLabel, className }) => (
   </button>
 );
 
-export default function ApplicationCard({ id, name, email, phone, linkedin, onDeleteClick, onBookmarkClick }) {
+export default function ApplicationCard({ id, name, email, phone, linkedin, resume, onDeleteClick, onBookmarkClick }) {
   return (
     <div className="group">
       <div className="relative bg-slate-100 border-slate-200 border-2  rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md group-hover:-translate-y-1">

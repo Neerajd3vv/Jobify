@@ -8,19 +8,19 @@ import {
   deleteSavedApplication,
   createAdmin,
   adminSignin,
-  verifyToken
+  istokenSend
 } from "../controllers/adminControllers.js";
-import { authmiddleware } from "../middlewares/authmiddleware.js";
+import { verifyToken } from "../middlewares/authmiddleware.js";
 const router = express.Router();
 router.post("/create-admin",  createAdmin);
-router.post("/admin-signin",  adminSignin);
+router.post("/login",  adminSignin);
 
-router.get("/applications", getAllApplication);
-router.delete("/deleteApplication/:id", authmiddleware, deleteApplication);
-router.post("/finding", authmiddleware, searchApplications);
-router.post("/bookmark", authmiddleware, savedApplications);
-router.get("/savedApplications", authmiddleware, showSavedApplication);
-router.delete("/deleteBookmark/:id", authmiddleware, deleteSavedApplication);
-router.get("/admin/verify-token" , authmiddleware, verifyToken)
+router.get("/applications", verifyToken, getAllApplication);
+router.delete("/deleteApplication/:id",  deleteApplication);
+router.post("/finding",  searchApplications);
+router.post("/bookmark",  savedApplications);
+router.get("/savedApplications",  showSavedApplication);
+router.delete("/deleteBookmark/:id",  deleteSavedApplication);
+router.get("/istokensend" , verifyToken , istokenSend)
 
 export default router;

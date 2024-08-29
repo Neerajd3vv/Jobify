@@ -1,21 +1,33 @@
+// userController.js
 import User from "../models/userdbSchema.js";
 import z from "zod";
+import path from "path";
 
 // Zod Schema
 const userRegisterSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   phone: z.string(),
-  linkedin: z.string(),
+  linkedin: z.string().url(),
+  resume: z.string().optional(), // Resume is optional as it may not be provided
 });
 
 export async function registerUser(req, res) {
-  const result = userRegisterSchema.safeParse(req.body);
+  const result = userRegisterSchema.safeParse({
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedin: req.body.linkedin,
+    resume: req.file ? path.join("resumes", req.file.filename) : undefined,
+  });
+
   if (!result.success) {
-    res.status(400).json({ msg: "Zod validation failed" , error: result.error.errors });
+    res
+      .status(400)
+      .json({ msg: "Zod validation failed", error: result.error.errors });
   } else {
     try {
-      // check if user with such info. already exists
+      // Check if user with such info. already exists
       const checkUser = await User.findOne({
         $or: [
           { phone: req.body.phone },
@@ -23,12 +35,14 @@ export async function registerUser(req, res) {
           { linkedin: req.body.linkedin },
         ],
       });
+
       if (!checkUser) {
         await User.create({
           name: req.body.name,
           email: req.body.email,
           phone: req.body.phone,
           linkedin: req.body.linkedin,
+          resume: result.data.resume,
         });
 
         return res.status(201).json({ msg: "Successfully registered!" });

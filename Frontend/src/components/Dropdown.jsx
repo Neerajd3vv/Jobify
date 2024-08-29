@@ -14,7 +14,7 @@ export function Dropdown() {
 
   const selectHandler = (value) => {
     if ( value === "Admin-Dashboard") {
-      navigate("/admin");
+      navigate("/applications");
     } else if (value === "Home-Page") {
       navigate("/");
     }

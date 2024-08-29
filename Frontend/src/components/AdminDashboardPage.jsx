@@ -8,10 +8,11 @@ function AdminDashboardPage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  
   // SigninHandler
   async function signinHandler() {
     try {
-      const admin = await fetch("http://localhost:3001/admin/admin-signin", {
+      const res = await fetch("http://localhost:3001/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,17 +22,16 @@ function AdminDashboardPage() {
           password: password.trim(),
         }),
       });
-      const result = await admin.json();
-      console.log(result);
-
-      if (result.GoodMessage) {
-        navigate("/applications");
-        toast.success("Welcome Admin!");
-      } else if (result.Notfound) {
-        toast.error("Please provide correct credentials");
+      const result = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", result.Admin_Token);
+        navigate("/applications")
+        toast.success("Welcome Admin!")
+      } else {
+        toast.error("Login failed!");
       }
     } catch (error) {
-      toast.error("Could not able to signIn");
+      toast.error("Login failed!");
     }
   }
 
