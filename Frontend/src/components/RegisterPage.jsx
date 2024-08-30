@@ -42,6 +42,7 @@ export default function RegisterPage() {
     formData.append("phone", phone);
     formData.append("linkedin", linkedin);
     formData.append("resume", resume);
+
     try {
       const response = await fetch(`${backend_url}/user/v1/register`, {
         method: "POST",
@@ -52,22 +53,22 @@ export default function RegisterPage() {
 
       if (response.ok) {
         toast.success("User created successfully!");
+        // Reset form fields
         setName("");
         setEmail("");
         setPhone("");
         setLinkedin("");
         setResume(null);
         setResumeName("");
-
-        // Reset the file input using the ref
         if (resumeInputRef.current) {
           resumeInputRef.current.value = "";
         }
       } else {
-        toast.error("User creation failed!");
+        toast.error(result.msg || "User creation failed!");
       }
     } catch (error) {
-      toast.error("Error in Registration: " + error.message);
+      console.error("Error in Registration:", error);
+      toast.error("Error in Registration. Please try again.");
     }
   }
 
