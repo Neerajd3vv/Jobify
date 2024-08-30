@@ -10,7 +10,6 @@ function AdminDashboardPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   
-   console.log("backend_url" , backend_url);
    
   // SigninHandler
   async function signinHandler() {
