@@ -223,7 +223,7 @@ function Applications() {
   
   function showPdf(resume) {
     window.open(
-      `https://jobify-4jst.onrender.com/admin/${resume}`,
+      `https://jobify-4jst.onrender.com/Resumes/${resume}`,
       "_blank",
       "noreferrer"
     );
