@@ -28,6 +28,10 @@ const adminsaveApplications = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resume: {
+    type: String,
+    required: true,
+  },
 });
 
 export const Admin = mongoose.model("Admin", admin);

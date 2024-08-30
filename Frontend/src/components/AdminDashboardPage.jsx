@@ -59,7 +59,7 @@ function AdminDashboardPage() {
                   setName(e.target.value);
                 }}
                 type="text"
-                placeholder="Admin Name"
+                placeholder="Admin Name - admin"
                 style="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>
@@ -75,7 +75,7 @@ function AdminDashboardPage() {
                   setPassword(e.target.value);
                 }}
                 type="text"
-                placeholder="Admin Password"
+                placeholder="Admin Password - 12345"
                 style="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
               />
             </div>

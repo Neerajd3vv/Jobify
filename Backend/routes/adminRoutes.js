@@ -8,7 +8,8 @@ import {
   deleteSavedApplication,
   createAdmin,
   adminSignin,
-  istokenSend
+  istokenSend,
+  searcSavedhApplications
 } from "../controllers/adminControllers.js";
 import { verifyToken } from "../middlewares/authmiddleware.js";
 const router = express.Router();
@@ -18,6 +19,7 @@ router.post("/login",  adminSignin);
 router.get("/applications", verifyToken, getAllApplication);
 router.delete("/deleteApplication/:id",  deleteApplication);
 router.post("/finding",  searchApplications);
+router.post("/searchBookmark",  searcSavedhApplications);
 router.post("/bookmark",  savedApplications);
 router.get("/savedApplications",  showSavedApplication);
 router.delete("/deleteBookmark/:id",  deleteSavedApplication);

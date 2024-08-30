@@ -14,6 +14,7 @@ app.use(cors({
   credentials: true,
   origin: "http://localhost:5173"
 }));
+app.use("/Resumes" ,express.static("Resumes"))
 app.use(express.json());
 
 

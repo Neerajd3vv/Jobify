@@ -15,7 +15,6 @@ function Applications() {
 
   useEffect(() => {
     async function verifyToken() {
-   
       try {
         const res = await fetch("http://localhost:3001/admin/istokensend", {
           method: "GET",
@@ -40,16 +39,16 @@ function Applications() {
   // Fetching applications
   const fetchApplications = async () => {
     try {
-      const res = await fetch("http://localhost:3001/admin/applications" ,{
+      const res = await fetch("http://localhost:3001/admin/applications", {
         headers: {
-          Authorization : `Bearer ${localStorage.getItem("token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (res.ok) {
         const result = await res.json();
         setApplications(result.Data);
       } else {
-        toast.error("Failed to get Applications");
+        console.log("Failed to fetch applications");
       }
     } catch (error) {
       console.error("Error", error);
@@ -111,6 +110,21 @@ function Applications() {
       } else {
         console.log("No applications found");
       }
+
+      ///
+      const res2 = await fetch("http://localhost:3001/admin/searchBookmark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ searchKeyWord: searchWord }),
+      });
+      if (res2.ok) {
+        const result2 = await res2.json();
+        setSavedApplication(result2.Result);
+      } else {
+        console.log("No applications found");
+      }
     } catch (error) {
       console.error("Error", error);
       toast.error("Failed to search applications");
@@ -133,7 +147,8 @@ function Applications() {
   }
 
   // onBookmarkClick
-  async function onBookmarkClick(name, email, phone, linkedin) {
+  async function onBookmarkClick(name, email, phone, linkedin, resume) {
+
     try {
       const savedAppli = await fetch("http://localhost:3001/admin/bookmark", {
         method: "POST",
@@ -145,6 +160,7 @@ function Applications() {
           email,
           phone,
           linkedin,
+          resume,
         }),
       });
       if (savedAppli.ok) {
@@ -176,7 +192,7 @@ function Applications() {
         const result = await savedAppli.json();
         setSavedApplication(result.Saved);
       } else {
-        toast.error("error occured");
+        toast.error("No Bookmark's");
       }
     } catch (error) {
       toast.error("Failed to fetch applications");
@@ -187,16 +203,16 @@ function Applications() {
     // fetch all Applicationns from backend
     setAllBookmark(false);
     try {
-      const res = await fetch("http://localhost:3001/admin/applications" , {
+      const res = await fetch("http://localhost:3001/admin/applications", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
       if (res.ok) {
         const result = await res.json();
         setApplications(result.Data);
       } else {
-        toast.error("Failed to get Applications");
+        toast.error("No Application's Found");
       }
     } catch (error) {
       console.error("Error", error);
@@ -204,7 +220,13 @@ function Applications() {
     }
   }
 
-  // this decide whether you stay at this page or will be redirected
+  function showPdf(resume) {
+    window.open(
+      `http://localhost:3001/Resumes/${resume}`,
+      "_blank",
+      "noreferrer"
+    );
+  }
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -224,19 +246,31 @@ function Applications() {
             APPLICATION'S
           </h1>
           {allBookmark ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {savedApplication.map((app,index) => (
-                <BookmarkApplications
-                key={index}
-                  id={app._id}
-                  name={app.name}
-                  email={app.email}
-                  phone={app.phone}
-                  linkedin={app.linkedin}
-                  onDeleteClick={onSavedDeleteHandler}
-                  onBookmarkClick={onBookmarkClick}
-                />
-              ))}
+            savedApplication.length === 0 ? (
+              <div className=" text-center font-sans text-4xl  lg:text-6xl">
+                No Saved Application's
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {savedApplication.map((app, index) => (
+                  <BookmarkApplications
+                    key={index}
+                    id={app._id}
+                    name={app.name}
+                    email={app.email}
+                    phone={app.phone}
+                    linkedin={app.linkedin}
+                    showPdf={() => {
+                      showPdf(app.resume);
+                    }}
+                    onDeleteClick={onSavedDeleteHandler}
+                  />
+                ))}
+              </div>
+            )
+          ) : applications.length === 0 ? (
+            <div className=" text-center font-sans text-4xl  lg:text-6xl">
+              No Application's has been created yet!
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -248,6 +282,10 @@ function Applications() {
                   email={app.email}
                   phone={app.phone}
                   linkedin={app.linkedin}
+                  resume={app.resume}
+                  showPdf={() => {
+                    showPdf(app.resume);
+                  }}
                   onDeleteClick={onDeleteHandler}
                   onBookmarkClick={onBookmarkClick}
                 />

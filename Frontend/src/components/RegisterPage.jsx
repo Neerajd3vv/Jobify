@@ -1,24 +1,27 @@
 // RegisterPage.js
-import React, { useState } from 'react';
-import Appbar from './Appbar';
-import Inputfield from './Inputfield';
-import Button from './button';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import Appbar from "./Appbar";
+import Inputfield from "./Inputfield";
+import Button from "./button";
+import { toast } from "react-toastify";
+import { useRef } from "react";
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [linkedin, setLinkedin] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [linkedin, setLinkedin] = useState("");
   const [resume, setResume] = useState(null);
-  const [resumeName, setResumeName] = useState('');
+  const [resumeName, setResumeName] = useState("");
+
+  const resumeInputRef = useRef(null);
 
   const maxPdfSize = 150 * 1024;
 
   function onpdfSelected(e) {
     const pdf = e.target.files[0];
     if (pdf.size > maxPdfSize) {
-      toast.error('PDF is above 150 kb');
+      toast.error("PDF is above 150 kb");
       return;
     }
 
@@ -28,37 +31,44 @@ export default function RegisterPage() {
 
   async function onSubmitHandler() {
     if (!name || !email || !phone || !linkedin || !resume) {
-      toast.error('All fields are required!');
+      toast.error("All fields are required!");
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('linkedin', linkedin);
-    formData.append('resume', resume);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("linkedin", linkedin);
+    formData.append("resume", resume);
 
     try {
-      const response = await fetch('http://localhost:3001/user/v1/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/user/v1/register", {
+        method: "POST",
         body: formData,
       });
 
-       await response.json();
+      const result = await response.json();
+      console.log(result);
+
       if (response.ok) {
-        toast.success('User created successfully!');
-        setName('');
-        setEmail('');
-        setPhone('');
-        setLinkedin('');
+        toast.success("User created successfully!");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setLinkedin("");
         setResume(null);
-        setResumeName('');
+        setResumeName("");
+
+        // Reset the file input using the ref
+        if (resumeInputRef.current) {
+          resumeInputRef.current.value = "";
+        }
       } else {
-        toast.error('User creation failed!');
+        toast.error("User creation failed!");
       }
     } catch (error) {
-      toast.error('Error in Registration: ' + error.message);
+      toast.error("Error in Registration: " + error.message);
     }
   }
 
@@ -156,6 +166,7 @@ export default function RegisterPage() {
                         <input
                           id="resume"
                           name="resume"
+                          ref={resumeInputRef}
                           type="file"
                           accept=".pdf"
                           onChange={onpdfSelected}
@@ -169,12 +180,12 @@ export default function RegisterPage() {
                   </div>
                 </div>
               </div>
-             <Button
-                  onClick={onSubmitHandler}
-                  style="bg-blue-700 w-full hover:bg-blue-600 px-6 py-2 text-white font-Afacad text-xl rounded-lg"
-                >
-                  Submit
-                </Button>
+              <Button
+                onClick={onSubmitHandler}
+                style="bg-blue-700 w-full hover:bg-blue-600 px-6 py-2 text-white font-Afacad text-xl rounded-lg"
+              >
+                Submit
+              </Button>
             </div>
           </div>
         </div>

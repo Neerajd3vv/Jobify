@@ -1,5 +1,11 @@
-import React from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaLinkedin, FaDownload } from "react-icons/fa";
+import React from "react";
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaLinkedin,
+  FaDownload,
+} from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 
@@ -13,25 +19,28 @@ const IconButton = ({ icon: Icon, onClick, ariaLabel, className }) => (
   </button>
 );
 
-export default function ApplicationCard({ id, name, email, phone, linkedin, onDeleteClick, onBookmarkClick }) {
+export default function BookmarkApplications({
+  id,
+  name,
+  email,
+  phone,
+  linkedin,
+  onDeleteClick,
+  showPdf,
+}) {
   return (
     <div className="group">
       <div className="relative bg-slate-100 border-slate-200 border-2  rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md group-hover:-translate-y-1">
-        
         <div className="relative p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="bg-slate-300 rounded-full p-3 ">
                 <FaUser className="text-white text-xl" />
               </div>
-              <div className="font-bold font-Afacad text-3xl text-actualBlack ">{name}</div>
+              <div className="font-bold font-Afacad text-3xl text-actualBlack ">
+                {name}
+              </div>
             </div>
-            <IconButton
-              icon={FaRegBookmark}
-              onClick={() => onBookmarkClick(name, email, phone, linkedin)}
-              ariaLabel="Bookmark application"
-              className="text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100"
-            />
           </div>
 
           <div className="space-y-3 text-sm text-gray-600">
@@ -54,7 +63,10 @@ export default function ApplicationCard({ id, name, email, phone, linkedin, onDe
               <span className="text-sm font-medium">LinkedIn Profile</span>
             </a>
             <div className="flex space-x-2">
-              <button className="px-4 py-2 bg-blue-700 text-white rounded-lg flex items-center space-x-2 ">
+              <button
+                onClick={showPdf}
+                className="px-4 py-2 bg-blue-700 text-white rounded-lg flex items-center space-x-2 "
+              >
                 <FaDownload className="text-sm " />
                 <span>Resume</span>
               </button>

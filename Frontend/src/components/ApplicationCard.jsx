@@ -13,7 +13,9 @@ const IconButton = ({ icon: Icon, onClick, ariaLabel, className }) => (
   </button>
 );
 
-export default function ApplicationCard({ id, name, email, phone, linkedin, resume, onDeleteClick, onBookmarkClick }) {
+export default function ApplicationCard({ id, name, email, phone, linkedin, resume, onDeleteClick, onBookmarkClick,showPdf }) {
+
+
   return (
     <div className="group">
       <div className="relative bg-slate-100 border-slate-200 border-2  rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md group-hover:-translate-y-1">
@@ -28,7 +30,7 @@ export default function ApplicationCard({ id, name, email, phone, linkedin, resu
             </div>
             <IconButton
               icon={FaRegBookmark}
-              onClick={() => onBookmarkClick(name, email, phone, linkedin)}
+              onClick={() => onBookmarkClick(name, email, phone, linkedin,resume)}
               ariaLabel="Bookmark application"
               className="text-indigo-400 hover:text-indigo-600 hover:bg-indigo-100"
             />
@@ -54,7 +56,7 @@ export default function ApplicationCard({ id, name, email, phone, linkedin, resu
               <span className="text-sm font-medium">LinkedIn Profile</span>
             </a>
             <div className="flex space-x-2">
-              <button className="px-4 py-2 bg-blue-700 text-white rounded-lg flex items-center space-x-2 ">
+              <button   onClick={showPdf} className="px-4 py-2 bg-blue-700 text-white rounded-lg flex items-center space-x-2 ">
                 <FaDownload className="text-sm " />
                 <span>Resume</span>
               </button>

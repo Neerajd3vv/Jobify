@@ -51,6 +51,26 @@ export async function searchApplications(req, res) {
     return res.status(500).json({ Message: "Internal server error" });
   }
 }
+export async function searcSavedhApplications(req, res) {
+  try {
+    const searchKeys = new RegExp(req.body.searchKeyWord, "i"); // i to make it case-insensitive
+    const findSavedApplications = await SavedApplications.find({
+      $or: [{ name: searchKeys }, { email: searchKeys }, { phone: searchKeys }],
+    });
+    if (findSavedApplications.length > 0) {
+      return res.status(200).json({
+        Message: "Found the searched Application",
+        Result: findSavedApplications,
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ Message: "No Application with such input found" });
+    }
+  } catch (err) {
+    return res.status(500).json({ Message: "Internal server error" });
+  }
+}
 
 // Zod validation for application coming to saved
 const savedZod = z.object({
@@ -78,7 +98,7 @@ export async function savedApplications(req, res) {
           email,
           phone,
           linkedin,
-          resume
+          resume,
         });
         return res.status(200).json({
           GoodMessage: "Application saved successfully!",
@@ -162,6 +182,6 @@ export async function adminSignin(req, res) {
   }
 }
 
-export function istokenSend (req,res) {
- return res.status(200).json({Message: "Valid token"})
+export function istokenSend(req, res) {
+  return res.status(200).json({ Message: "Valid token" });
 }

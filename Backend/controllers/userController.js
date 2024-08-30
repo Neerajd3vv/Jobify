@@ -1,7 +1,6 @@
 // userController.js
 import User from "../models/userdbSchema.js";
 import z from "zod";
-import path from "path";
 
 // Zod Schema
 const userRegisterSchema = z.object({
@@ -9,7 +8,7 @@ const userRegisterSchema = z.object({
   email: z.string().email(),
   phone: z.string(),
   linkedin: z.string().url(),
-  resume: z.string().optional(), // Resume is optional as it may not be provided
+  resume: z.string()
 });
 
 export async function registerUser(req, res) {
@@ -18,7 +17,7 @@ export async function registerUser(req, res) {
     email: req.body.email,
     phone: req.body.phone,
     linkedin: req.body.linkedin,
-    resume: req.file ? path.join("resumes", req.file.filename) : undefined,
+    resume: req.file.filename,
   });
 
   if (!result.success) {
@@ -29,7 +28,7 @@ export async function registerUser(req, res) {
     try {
       // Check if user with such info. already exists
       const checkUser = await User.findOne({
-        $or: [
+        $or: [ 
           { phone: req.body.phone },
           { email: req.body.email },
           { linkedin: req.body.linkedin },
@@ -56,3 +55,4 @@ export async function registerUser(req, res) {
     }
   }
 }
+
