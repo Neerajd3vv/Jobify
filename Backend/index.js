@@ -14,6 +14,13 @@ app.use(cors({
   credentials: true,
   origin: "https://jobify-swart-one.vercel.app/"
 }));
+const allowedOrigins = ['https://jobify-swart-one.vercel.app'];
+
+   app.use(cors({
+       origin: allowedOrigins,
+       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+       credentials: true,
+   }));
 app.use("/Resumes" ,express.static("Resumes"))
 app.use(express.json());
 
