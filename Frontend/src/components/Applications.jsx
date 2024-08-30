@@ -6,6 +6,7 @@ import Appbar from "./Appbar";
 import Sidebar from "./Sidebar";
 import _ from "lodash";
 import { useNavigate } from "react-router-dom";
+import { backend_Url } from "@/config";
 function Applications() {
   const [applications, setApplications] = useState([]);
   const [savedApplication, setSavedApplication] = useState([]);
@@ -16,7 +17,7 @@ function Applications() {
   useEffect(() => {
     async function verifyToken() {
       try {
-        const res = await fetch("http://localhost:3001/admin/istokensend", {
+        const res = await fetch(`${backend_Url}/admin/istokensend`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Ensure Bearer scheme is used if applicable
@@ -35,11 +36,10 @@ function Applications() {
     }
     verifyToken(); // Correctly calling the verifyToken function
   }, [navigate]);
-
   // Fetching applications
   const fetchApplications = async () => {
     try {
-      const res = await fetch("http://localhost:3001/admin/applications", {
+      const res = await fetch(`${backend_Url}/admin/applications`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -55,12 +55,11 @@ function Applications() {
       toast.error("Failed to fetch applications");
     }
   };
-
   // Delete applications
   async function onDeleteHandler(id) {
     try {
       const deleted = await fetch(
-        `http://localhost:3001/admin/deleteApplication/${id}`,
+        `${backend_Url}/admin/deleteApplication/${id}`,
         { method: "DELETE" }
       );
       if (deleted.ok) {
@@ -78,7 +77,7 @@ function Applications() {
   async function onSavedDeleteHandler(id) {
     try {
       const deleted = await fetch(
-        `http://localhost:3001/admin/deleteBookmark/${id}`,
+        `${backend_Url}/admin/deleteBookmark/${id}`,
         { method: "DELETE" }
       );
       if (deleted.ok) {
@@ -97,7 +96,7 @@ function Applications() {
   // Search functionality
   const fetchSearchedApplications = async (searchWord) => {
     try {
-      const res = await fetch("http://localhost:3001/admin/finding", {
+      const res = await fetch(`${backend_Url}/admin/finding`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,8 +110,8 @@ function Applications() {
         console.log("No applications found");
       }
 
-      ///
-      const res2 = await fetch("http://localhost:3001/admin/searchBookmark", {
+
+      const res2 = await fetch(`${backend_Url}/admin/searchBookmark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -150,7 +149,7 @@ function Applications() {
   async function onBookmarkClick(name, email, phone, linkedin, resume) {
 
     try {
-      const savedAppli = await fetch("http://localhost:3001/admin/bookmark", {
+      const savedAppli = await fetch(`${backend_Url}/admin/bookmark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,7 +202,7 @@ function Applications() {
     // fetch all Applicationns from backend
     setAllBookmark(false);
     try {
-      const res = await fetch("http://localhost:3001/admin/applications", {
+      const res = await fetch(`${backend_Url}/admin/applications`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -222,7 +221,7 @@ function Applications() {
 
   function showPdf(resume) {
     window.open(
-      `http://localhost:3001/Resumes/${resume}`,
+      `${backend_Url}/Resumes/${resume}`,
       "_blank",
       "noreferrer"
     );

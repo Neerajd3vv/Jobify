@@ -4,15 +4,17 @@ import Inputfield from "./Inputfield";
 import Button from "./Button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+ import { backend_Url } from "@/config";
 function AdminDashboardPage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   
+  
   // SigninHandler
   async function signinHandler() {
     try {
-      const res = await fetch("http://localhost:3001/admin/login", {
+      const res = await fetch(`${backend_Url}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

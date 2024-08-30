@@ -5,6 +5,8 @@ import Inputfield from "./Inputfield";
 import Button from "./button";
 import { toast } from "react-toastify";
 import { useRef } from "react";
+import { backend_Url } from "@/config";
+
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -43,7 +45,7 @@ export default function RegisterPage() {
     formData.append("resume", resume);
 
     try {
-      const response = await fetch("http://localhost:3001/user/v1/register", {
+      const response = await fetch(`${backend_Url}/user/v1/register`, {
         method: "POST",
         body: formData,
       });
