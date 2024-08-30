@@ -214,7 +214,7 @@ function Applications() {
   }
 
   function showPdf(resume) {
-    window.open(`${backend_url}/Resumes/${resume}`, "_blank", "noreferrer");
+    window.open(`${backend_url}/resume/${resume}`, "_blank", "noreferrer");
   }
 
   return (
