@@ -11,7 +11,7 @@ dotenv.config();
 // initializing express
 const app = new express();
 
-const allowedOrigins = ["https://jobify-swart-one.vercel.app" , "http://localhost:5173"];
+const allowedOrigins = ["https://jobify-sigma-ten.vercel.app" , "http://localhost:5173"];
 
 app.use(
   cors({
