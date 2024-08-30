@@ -10,10 +10,7 @@ dotenv.config();
 
 // initializing express
 const app = new express();
-app.use(cors({
-  credentials: true,
-  origin: "https://jobify-swart-one.vercel.app/"
-}));
+
 const allowedOrigins = ['https://jobify-swart-one.vercel.app'];
 
    app.use(cors({
