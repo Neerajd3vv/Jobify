@@ -5,8 +5,6 @@ import Inputfield from "./Inputfield";
 import Button from "./Button";
 import { toast } from "react-toastify";
 import { useRef } from "react";
-import { backend_Url } from "@/config";
-
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -43,9 +41,9 @@ export default function RegisterPage() {
     formData.append("phone", phone);
     formData.append("linkedin", linkedin);
     formData.append("resume", resume);
-
+ 
     try {
-      const response = await fetch(`${backend_Url}/user/v1/register`, {
+      const response = await fetch("https://jobify-4jst.onrender.com/user/v1/register", {
         method: "POST",
         body: formData,
       });

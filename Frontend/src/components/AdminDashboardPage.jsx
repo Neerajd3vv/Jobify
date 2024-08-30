@@ -4,7 +4,6 @@ import Inputfield from "./Inputfield";
 import Button from "./Button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
- import { backend_Url } from "@/config";
 function AdminDashboardPage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +13,7 @@ function AdminDashboardPage() {
   // SigninHandler
   async function signinHandler() {
     try {
-      const res = await fetch(`${backend_Url}/admin/login`, {
+      const res = await fetch("https://jobify-4jst.onrender.com/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
