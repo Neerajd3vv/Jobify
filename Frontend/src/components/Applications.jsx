@@ -6,17 +6,17 @@ import Appbar from "./Appbar";
 import Sidebar from "./Sidebar";
 import _ from "lodash";
 import { useNavigate } from "react-router-dom";
+import { backend_url } from "@/config";
 function Applications() {
   const [applications, setApplications] = useState([]);
   const [savedApplication, setSavedApplication] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   const [allBookmark, setAllBookmark] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
     async function verifyToken() {
       try {
-        const res = await fetch("https://jobify-4jst.onrender.com/admin/istokensend", {
+        const res = await fetch(`${backend_url}/admin/istokensend`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // Ensure Bearer scheme is used if applicable
@@ -38,7 +38,7 @@ function Applications() {
   // Fetching applications
   const fetchApplications = async () => {
     try {
-      const res = await fetch("https://jobify-4jst.onrender.com/admin/applications", {
+      const res = await fetch(`${backend_url}/admin/applications`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -59,7 +59,7 @@ function Applications() {
   async function onDeleteHandler(id) {
     try {
       const deleted = await fetch(
-        `https://jobify-4jst.onrender.com/admin/deleteApplication/${id}`,
+        `${backend_url}/admin/deleteApplication/${id}`,
         { method: "DELETE" }
       );
       if (deleted.ok) {
@@ -76,10 +76,9 @@ function Applications() {
   // Delete Bookmarked application
   async function onSavedDeleteHandler(id) {
     try {
-      const deleted = await fetch(
-        `https://jobify-4jst.onrender.com/admin/deleteBookmark/${id}`,
-        { method: "DELETE" }
-      );
+      const deleted = await fetch(`${backend_url}/admin/deleteBookmark/${id}`, {
+        method: "DELETE",
+      });
       if (deleted.ok) {
         setSavedApplication((prev) => prev.filter((app) => app._id !== id));
         toast.success("Bookmark Deleted Successfully!");
@@ -93,11 +92,10 @@ function Applications() {
     }
   }
 
-  
   // Search functionality
   const fetchSearchedApplications = async (searchWord) => {
     try {
-      const res = await fetch("https://jobify-4jst.onrender.com/admin/finding", {
+      const res = await fetch(`${backend_url}/admin/finding`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,8 +109,7 @@ function Applications() {
         console.log("No applications found");
       }
 
-      
-      const res2 = await fetch("https://jobify-4jst.onrender.com/admin/searchBookmark", {
+      const res2 = await fetch(`${backend_url}/admin/searchBookmark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,9 +145,8 @@ function Applications() {
 
   // onBookmarkClick
   async function onBookmarkClick(name, email, phone, linkedin, resume) {
-
     try {
-      const savedAppli = await fetch("https://jobify-4jst.onrender.com/admin/bookmark", {
+      const savedAppli = await fetch(`${backend_url}/admin/bookmark`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -182,12 +178,9 @@ function Applications() {
     // fetch bookmarked application from backend
     setAllBookmark(true);
     try {
-      const savedAppli = await fetch(
-        "https://jobify-4jst.onrender.com/admin/savedApplications",
-        {
-          method: "GET",
-        }
-      );
+      const savedAppli = await fetch(`${backend_url}/admin/savedApplications`, {
+        method: "GET",
+      });
       if (savedAppli.ok) {
         const result = await savedAppli.json();
         setSavedApplication(result.Saved);
@@ -203,7 +196,7 @@ function Applications() {
     // fetch all Applicationns from backend
     setAllBookmark(false);
     try {
-      const res = await fetch("https://jobify-4jst.onrender.com/admin/applications", {
+      const res = await fetch(`${backend_url}/admin/applications`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -220,13 +213,8 @@ function Applications() {
     }
   }
 
-  
   function showPdf(resume) {
-    window.open(
-      `https://jobify-4jst.onrender.com/Resumes/${resume}`,
-      "_blank",
-      "noreferrer"
-    );
+    window.open(`${backend_url}/Resumes/${resume}`, "_blank", "noreferrer");
   }
 
   return (
