@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "66d2271e7bcb5a943696fd1b"
+  },
+  "name": "Neeraj bhatt",
+  "email": "neerajwdev@gmail.com",
+  "phone": "9776534321",
+  "linkedin": "https://www.linkedin.com/in/neeraj-bhatt-dev/",
+  "resume": "1725048606255-FInallll.pdf",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d227947bcb5a943696fd1f"
+  },
+  "name": "Surya pratap",
+  "email": "surya@gmail.com",
+  "phone": "999897766",
+  "linkedin": "https://www.linkedin.com/in/surya-pratap-871b95187/",
+  "resume": "1725048724438-FInallll.pdf",
+  "__v": 0
+}]
