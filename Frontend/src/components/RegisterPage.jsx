@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Appbar from "./Appbar";
 import Inputfield from "./Inputfield";
-import Button from "./button";
+import Button from "./Button";
 import { toast } from "react-toastify";
 import { useRef } from "react";
 import { backend_Url } from "@/config";
