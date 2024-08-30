@@ -1,7 +1,33 @@
 import User from "../models/userdbSchema.js";
+import z from "zod";
+
+// Zod Schema
+const userRegisterSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  linkedin: z.string().url(),
+  resume: z.string()
+});
 
 export async function registerUser(req, res) {
   try {
+    const result = userRegisterSchema.safeParse({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      linkedin: req.body.linkedin,
+      resume: req.file ? req.file.filename : undefined,
+    });
+
+    console.log("Result-Backend", result);
+
+    if (!result.success) {
+      return res
+        .status(400)
+        .json({ msg: "Validation failed", error: result.error.errors });
+    }
+
     // Check if user with such info. already exists
     const checkUser = await User.findOne({
       $or: [
@@ -22,7 +48,7 @@ export async function registerUser(req, res) {
       email: req.body.email,
       phone: req.body.phone,
       linkedin: req.body.linkedin,
-      resume: req.file.filename,
+      resume: result.data.resume,
     });
 
     return res.status(201).json({ msg: "Successfully registered!" });
