@@ -1,5 +1,5 @@
 import express from "express"
-import { registerUser,  } from "../controllers/userController.js"
+import { registerUser } from "../controllers/userController.js"
 const router =  express.Router()
 import upload from "../config/multerConfig.js"
 

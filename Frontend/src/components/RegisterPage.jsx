@@ -50,7 +50,6 @@ export default function RegisterPage() {
       });
 
       const result = await response.json();
-
       if (response.ok) {
         toast.success("User created successfully!");
         // Reset form fields
