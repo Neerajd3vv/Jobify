@@ -11,16 +11,19 @@ dotenv.config();
 // initializing express
 const app = new express();
 
-const allowedOrigins = ['https://jobify-swart-one.vercel.app'];
+const allowedOrigins = ["https://jobify-swart-one.vercel.app" , "http://localhost:5173"];
 
-   app.use(cors({
-       origin: allowedOrigins,
-       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-       credentials: true,
-   }));
-app.use("/Resumes" ,express.static("Resumes"))
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+
+  })
+);
+// to serve static thing
+app.use("/Resumes", express.static("Resumes"));
 app.use(express.json());
-
+app.use(express.urlencoded({extended: false}))
 
 // connected to mongodb
 connectionToMongodb();
