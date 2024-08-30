@@ -48,6 +48,8 @@ export default function RegisterPage() {
         method: "POST",
         body: formData,
       });
+      console.log("full-resonse" , response);
+      
 
       const result = await response.json();
       if (response.ok) {

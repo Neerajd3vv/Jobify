@@ -21,7 +21,7 @@ app.use(
   })
 );
 // to serve static thing
-app.use("/resume", express.static("resume"));
+app.use("/files", express.static("files"));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 
