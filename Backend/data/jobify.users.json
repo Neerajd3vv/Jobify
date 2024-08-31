@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "66d2d7f7e712363931c9b902"
+  },
+  "name": "Neeraj bhatt",
+  "email": "neerajwdev@gmail.com",
+  "phone": "9887765434",
+  "linkedin": "https://www.linkedin.com/in/neeraj-bhatt-dev/",
+  "resume": "1725093879866-FInallll.pdf",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d2d83ce712363931c9b906"
+  },
+  "name": "Surya pratap",
+  "email": "surya@gmail.com",
+  "phone": "988879877",
+  "linkedin": "https://www.linkedin.com/in/surya-pratap-871b95187/",
+  "resume": "1725093948005-FInallll.pdf",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d2d87fe712363931c9b90f"
+  },
+  "name": "sumit bhati",
+  "email": "sumit@gmail.com",
+  "phone": "9988737633",
+  "linkedin": "https://www.linkedin.com/in/sumit/",
+  "resume": "1725094015514-FInallll.pdf",
+  "__v": 0
+}]
